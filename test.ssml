@@ -1,0 +1,6 @@
+<speak version='1.0' xml:lang='ru-RU' xmlns='http://www.w3.org/2001/10/synthesis' xmlns:mstts='http://www.w3.org/2001/mstts'>
+<prosody rate='100%'>
+<speak>123</speak>
+</prosody>
+<prosody rate='50%'>Hello, world!</prosody>
+</speak>

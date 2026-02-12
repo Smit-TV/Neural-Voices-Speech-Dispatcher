@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <EmbeddedTtsNativePlatform>$(Platform)</EmbeddedTtsNativePlatform>
+  </PropertyGroup>
+  <Import Project="$(MSBuildThisFileDirectory)\..\Microsoft.CognitiveServices.Speech.Extension.Embedded.TTS.props" />
+    <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(EmbeddedTtsPackageRoot)build\native\include\cxx_api;$(EmbeddedTtsPackageRoot)build\native\include\c_api;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(EmbeddedTtsPackageRoot)build\native\include\cxx_api;$(EmbeddedTtsPackageRoot)build\native\include\c_api;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>$(EmbeddedTtsNativeLibDir)\Microsoft.CognitiveServices.Speech.extension.embedded.tts.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <Target Name="EmbeddedTtsRedistAfterBuild" AfterTargets="AfterBuild" >
+    <Copy SourceFiles="$(EmbeddedTtsNativeDllDir)\Microsoft.CognitiveServices.Speech.extension.embedded.tts.dll" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
+  </Target>
+</Project>

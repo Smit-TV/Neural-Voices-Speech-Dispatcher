@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <EmbeddedTtsPackageRoot>$(MSBuildThisFileDirectory)..\</EmbeddedTtsPackageRoot>
+    <EmbeddedTtsRuntimePath Condition="'$(Platform)' == 'ARM64'">win-arm64</EmbeddedTtsRuntimePath>
+    <EmbeddedTtsRuntimePath Condition="'$(Platform)' == 'x64'">win-x64</EmbeddedTtsRuntimePath>
+    <EmbeddedTtsNativeLibDir Condition="'$(TargetPlatformIdentifier)' != 'UAP'">$(EmbeddedTtsPackageRoot)build\native\$(EmbeddedTtsNativePlatform)\Release</EmbeddedTtsNativeLibDir>
+    <EmbeddedTtsNativeLibDir Condition="'$(TargetPlatformIdentifier)' == 'UAP'">$(EmbeddedTtsPackageRoot)build\native\uap\$(EmbeddedTtsNativePlatform)\Release</EmbeddedTtsNativeLibDir>
+    <EmbeddedTtsNativeDllDir Condition="'$(TargetPlatformIdentifier)' == 'UAP'">$(EmbeddedTtsPackageRoot)runtimes\$(EmbeddedTtsRuntimePath)\nativeassets\uap</EmbeddedTtsNativeDllDir>
+    <EmbeddedTtsNativeDllDir Condition="'$(TargetPlatformIdentifier)' != 'UAP'">$(EmbeddedTtsPackageRoot)runtimes\$(EmbeddedTtsRuntimePath)\native</EmbeddedTtsNativeDllDir>
+  </PropertyGroup>
+</Project>

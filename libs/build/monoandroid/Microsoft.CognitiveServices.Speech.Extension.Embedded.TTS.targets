@@ -1,0 +1,41 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+
+    <AndroidNativeLibrary Include="$(MSBuildThisFileDirectory)\libs\arm64-v8a\libMicrosoft.CognitiveServices.Speech.extension.embedded.tts.so">
+      <Abi>arm64-v8a</Abi>
+      <Link>libs\arm64-v8a\libMicrosoft.CognitiveServices.Speech.extension.embedded.tts.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="$(MSBuildThisFileDirectory)\libs\arm64-v8a\libMicrosoft.CognitiveServices.Speech.extension.embedded.tts.runtime.so">
+      <Abi>arm64-v8a</Abi>
+      <Link>libs\arm64-v8a\libMicrosoft.CognitiveServices.Speech.extension.embedded.tts.runtime.so</Link>
+    </AndroidNativeLibrary>
+
+    <AndroidNativeLibrary Include="$(MSBuildThisFileDirectory)\libs\armeabi-v7a\libMicrosoft.CognitiveServices.Speech.extension.embedded.tts.so">
+      <Abi>armeabi-v7a</Abi>
+      <Link>libs\armeabi-v7a\libMicrosoft.CognitiveServices.Speech.extension.embedded.tts.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="$(MSBuildThisFileDirectory)\libs\armeabi-v7a\libMicrosoft.CognitiveServices.Speech.extension.embedded.tts.runtime.so">
+      <Abi>armeabi-v7a</Abi>
+      <Link>libs\armeabi-v7a\libMicrosoft.CognitiveServices.Speech.extension.embedded.tts.runtime.so</Link>
+    </AndroidNativeLibrary>
+
+    <AndroidNativeLibrary Include="$(MSBuildThisFileDirectory)\libs\x86\libMicrosoft.CognitiveServices.Speech.extension.embedded.tts.so">
+      <Abi>x86</Abi>
+      <Link>libs\x86\libMicrosoft.CognitiveServices.Speech.extension.embedded.tts.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="$(MSBuildThisFileDirectory)\libs\x86\libMicrosoft.CognitiveServices.Speech.extension.embedded.tts.runtime.so">
+      <Abi>x86</Abi>
+      <Link>libs\x86\libMicrosoft.CognitiveServices.Speech.extension.embedded.tts.runtime.so</Link>
+    </AndroidNativeLibrary>
+
+    <AndroidNativeLibrary Include="$(MSBuildThisFileDirectory)\libs\x86_64\libMicrosoft.CognitiveServices.Speech.extension.embedded.tts.so">
+      <Abi>x86_64</Abi>
+      <Link>libs\x86_64\libMicrosoft.CognitiveServices.Speech.extension.embedded.tts.so</Link>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="$(MSBuildThisFileDirectory)\libs\x86_64\libMicrosoft.CognitiveServices.Speech.extension.embedded.tts.runtime.so">
+      <Abi>x86_64</Abi>
+      <Link>libs\x86_64\libMicrosoft.CognitiveServices.Speech.extension.embedded.tts.runtime.so</Link>
+    </AndroidNativeLibrary>
+
+  </ItemGroup>
+</Project>

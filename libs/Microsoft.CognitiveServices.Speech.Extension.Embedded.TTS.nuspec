@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Microsoft.CognitiveServices.Speech.Extension.Embedded.TTS</id>
+    <version>1.47.0</version>
+    <title>Microsoft Cognitive Services Speech SDK extension to use embedded speech synthesis</title>
+    <authors>Microsoft</authors>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <license type="file">LICENSE.txt</license>
+    <licenseUrl>https://aka.ms/deprecateLicenseUrl</licenseUrl>
+    <projectUrl>https://aka.ms/csspeech</projectUrl>
+    <description>This NuGet package provides native and managed libraries to use embedded speech synthesis with the Microsoft Cognitive Services Speech SDK.</description>
+    <summary>Microsoft Cognitive Services Speech SDK extension to use embedded speech synthesis</summary>
+    <copyright>© Microsoft Corporation. All rights reserved.</copyright>
+    <tags>Microsoft Speech Cognitive Services native C++ C# .NET .NETStandard</tags>
+    <dependencies>
+      <dependency id="Microsoft.CognitiveServices.Speech" version="1.47.0" />
+      <dependency id="Microsoft.CognitiveServices.Speech.Extension.ONNX.Runtime" version="1.47.0" />
+      <dependency id="Microsoft.CognitiveServices.Speech.Extension.Telemetry" version="1.47.0" />
+    </dependencies>
+  </metadata>
+</package>

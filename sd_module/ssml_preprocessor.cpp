@@ -3,6 +3,7 @@
 #include <pugixml.hpp>
 #include <string>
 #include <iostream>
+#include <sstream>
 
 void collect_text(const pugi::xml_node& node, std::string& out) {
     for (auto child : node.children()) {
@@ -16,7 +17,7 @@ void collect_text(const pugi::xml_node& node, std::string& out) {
     }
 }
 
-std::string extract_text_from_ssml(const std::string& ssml) {
+std::string extractTextFromSSML(const std::string& ssml) {
     try {
     pugi::xml_document doc;
     pugi::xml_parse_result result = doc.load_string(ssml.c_str());
@@ -33,15 +34,30 @@ std::string extract_text_from_ssml(const std::string& ssml) {
 } 
 }
 
+std::string createSpeakSSML(const std::string& text, int rate, int volume, int pitch)
+{
+    pugi::xml_document doc;
 
-std::string getProcentage(int value) {
-    return std::to_string(value) + std::string("%' ");
-}
+    pugi::xml_node speak = doc.append_child("speak");
+    speak.append_attribute("version") = "1.0";
+    speak.append_attribute("xml:lang") = "ru-RU";
+    speak.append_attribute("xmlns") = "http://www.w3.org/2001/10/synthesis";
+    speak.append_attribute("xmlns:mstts") = "http://www.w3.org/2001/mstts";
 
-std::string processSSML(const std::string& text, int rate, int pitch, int volume) {
-    std::string ssmlHead = "<speak version='1.0' xml:lang='ru-RU' xmlns='http://www.w3.org/2001/10/synthesis' xmlns:mstts='http://www.w3.org/2001/mstts'><prosody rate='";
-    std::string rateProcentage = getProcentage(rate);
-    ssmlHead = ssmlHead + rateProcentage + std::string(" pitch='") + getProcentage(pitch) + std::string(" volume='") + getProcentage(volume);
+    pugi::xml_node prosody = speak.append_child("prosody");
 
-    return ssmlHead + std::string(">") + text + std::string("</prosody></speak>");
+    std::string rate_str = std::to_string(rate) + "%";
+    std::string volume_str = std::to_string(volume) + "%";
+    std::string pitch_str = std::to_string(pitch) + "%";
+
+    prosody.append_attribute("rate") = rate_str.c_str();
+    prosody.append_attribute("volume") = volume_str.c_str();
+    prosody.append_attribute("pitch") = pitch_str.c_str();
+
+    prosody.text().set(text.c_str());
+
+    std::ostringstream oss;
+    doc.save(oss, "", pugi::format_raw);
+
+    return oss.str();
 }

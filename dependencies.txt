@@ -1,1 +1,1 @@
-libspeechd_module libMicrosoft.CognitiveServices.Speech libpugixml libicu
+libspeechd_modulelibpugixml libicu

@@ -3,7 +3,7 @@
 
 #include <string>
 
-std::string extract_text_from_ssml(const std::string& ssml);
-std::string processSSML(const std::string& text, int rate, int pitch, int volume);
+std::string extractTextFromSSML(const std::string& ssml);
+std::string createSpeakSSML(const std::string& text, int rate, int volume, int pitch);
 
 #endif // SSML_PREPROCESSOR_HPP

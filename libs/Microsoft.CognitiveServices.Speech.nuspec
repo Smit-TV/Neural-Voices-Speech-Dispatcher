@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
     <id>Microsoft.CognitiveServices.Speech</id>
-    <version>1.47.0</version>
+    <version>1.50.0</version>
     <title>Microsoft Cognitive Services Speech SDK</title>
     <authors>Microsoft</authors>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>

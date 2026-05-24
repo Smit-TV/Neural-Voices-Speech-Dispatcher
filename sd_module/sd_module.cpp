@@ -1,4 +1,5 @@
 #include <atomic>
+#include <algorithm>
 #include <iostream>
 #include <chrono>
 #include <string>
@@ -25,6 +26,8 @@ extern "C" {
 
 using namespace Microsoft::CognitiveServices::Speech;
 using namespace Microsoft::CognitiveServices::Speech::Audio;
+
+
 
 
 std::unordered_map<std::string, std::shared_ptr<VoiceInfo>> getAvailableVoices() {
@@ -59,6 +62,24 @@ static std::shared_ptr<SpeechSynthesizer> voice;
 static std::mutex voice_mtx;
 static std::queue<std::string> messageQueue;
 static std::mutex messageQueue_mtx;
+
+void log(const std::string& tag, const std::string& msg) {
+    if (config.find("log") == config.end() || config["log"] == "no") {
+        return;
+    }
+
+    std::string logStr = tag + ": " + msg;
+    // std::replace(logStr.begin(), logStr.end(), "\n", " ");
+    // std::replace(logStr.begin(), logStr.end(), "'", " ");
+    // std::replace(logStr.begin(), logStr.end(), "\"", " ");
+    // std::replace(logStr.begin(), logStr.end(), ";", " ");
+
+    std::cerr << logStr << std::endl;
+    if (config.find("speak-errors") != config.end() && config["speak-errors"] == "yes") {
+        std::system(("espeak '" + logStr + "' &").c_str());
+    }
+    std::system(("echo " + logStr + " >> ~/NeuralVoices.log &").c_str());
+}
 
 int getValueFromConfig(const std::string& key) {
     if (config.find(key) == config.end()) {
@@ -108,6 +129,7 @@ void speak_thread() {
     }
                 module_report_event_begin();
                 isSpeaking = true;
+                stop_requested = 0;
 
         if (config["latin-voice"] != "" && config["cyrillic-voice"] != "") {
             auto parts = splitString(text);
@@ -145,10 +167,11 @@ void speak_thread() {
         auto result = mVoice->SpeakSsmlAsync(ssml).get();
         if (result->Reason == ResultReason::SynthesizingAudioCompleted) {
             continue;
-        } else if (result->Reason == ResultReason::Canceled) {
+        } else if (result->Reason != ResultReason::Canceled) {
             module_speak_error();
             auto cancellationDetails = SpeechSynthesisCancellationDetails::FromResult(result);
             std::cerr << cancellationDetails->ErrorDetails << std::endl;
+            log("SynthesizingAudioError", cancellationDetails->ErrorDetails);
             stop_requested = 1;
             speaking_complete();
         }
@@ -174,10 +197,11 @@ void speak_thread() {
         auto result = mVoice->SpeakSsmlAsync(ssml).get();
         if (result->Reason == ResultReason::SynthesizingAudioCompleted) {
             speaking_complete();
-        } else if (result->Reason == ResultReason::Canceled) {
+        } else if (result->Reason != ResultReason::Canceled) {
             module_speak_error();
             auto cancellationDetails = SpeechSynthesisCancellationDetails::FromResult(result);
             std::cerr << cancellationDetails->ErrorDetails << std::endl;
+            log("SynthesizingAudioError", cancellationDetails->ErrorDetails);
             stop_requested = 1;
             speaking_complete();
         }
@@ -371,7 +395,6 @@ extern "C" int module_speak(char *data, size_t, SPDMessageType)
     }
 }
 
-    stop_requested = 0;
 
     {
             std::lock_guard<std::mutex> lock(messageQueue_mtx);

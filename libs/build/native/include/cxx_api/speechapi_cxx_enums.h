@@ -327,8 +327,9 @@ enum class PropertyId
 
     /// <summary>
     /// A string value specifying which post processing option should be used by service.
-    /// Allowed values are "TrueText".
     /// Added in version 1.5.0
+    ///
+    /// For more information about post processing options, please visit https://aka.ms/csspeech/postprocessing.
     /// </summary>
     SpeechServiceResponse_PostProcessingOption = 4003,
 
@@ -414,6 +415,12 @@ enum class PropertyId
     /// This indicates whether cloud (online) or embedded (offline) recognition was used to produce the result.
     /// </summary>
     SpeechServiceResponse_RecognitionBackend = 5003,
+
+    /// <summary>
+    /// The request ID from the speech service for this recognition. This is a unique identifier for the request.
+    /// Read-only, available on final speech/translation recognition results.
+    /// </summary>
+    SpeechServiceResponse_RequestId = 5004,
 
     /// <summary>
     /// The speech synthesis first byte latency in milliseconds. Read-only, available on final speech synthesis results.

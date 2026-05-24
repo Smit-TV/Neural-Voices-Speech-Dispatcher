@@ -19,15 +19,6 @@
       <Link>libs\armeabi-v7a\libMicrosoft.CognitiveServices.Speech.extension.embedded.tts.runtime.so</Link>
     </AndroidNativeLibrary>
 
-    <AndroidNativeLibrary Include="$(MSBuildThisFileDirectory)\libs\x86\libMicrosoft.CognitiveServices.Speech.extension.embedded.tts.so">
-      <Abi>x86</Abi>
-      <Link>libs\x86\libMicrosoft.CognitiveServices.Speech.extension.embedded.tts.so</Link>
-    </AndroidNativeLibrary>
-    <AndroidNativeLibrary Include="$(MSBuildThisFileDirectory)\libs\x86\libMicrosoft.CognitiveServices.Speech.extension.embedded.tts.runtime.so">
-      <Abi>x86</Abi>
-      <Link>libs\x86\libMicrosoft.CognitiveServices.Speech.extension.embedded.tts.runtime.so</Link>
-    </AndroidNativeLibrary>
-
     <AndroidNativeLibrary Include="$(MSBuildThisFileDirectory)\libs\x86_64\libMicrosoft.CognitiveServices.Speech.extension.embedded.tts.so">
       <Abi>x86_64</Abi>
       <Link>libs\x86_64\libMicrosoft.CognitiveServices.Speech.extension.embedded.tts.so</Link>

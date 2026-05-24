@@ -192,7 +192,6 @@ public:
     /// <returns>A shared pointer to CancellationDetails.</returns>
     static std::shared_ptr<CancellationDetails> FromResult(std::shared_ptr<RecognitionResult> result)
     {
-        // VSTS 1407221
         // SPX_THROW_HR_IF(result->Reason != ResultReason::Canceled, SPXERR_INVALID_ARG);
         auto ptr = new CancellationDetails(result.get());
         auto cancellation = std::shared_ptr<CancellationDetails>(ptr);
@@ -276,7 +275,6 @@ public:
     /// <returns>A shared pointer to NoMatchDetails.</returns>
     static std::shared_ptr<NoMatchDetails> FromResult(std::shared_ptr<RecognitionResult> result)
     {
-        // VSTS 1407221
         // SPX_THROW_HR_IF(SPXERR_INVALID_ARG, result->Reason != ResultReason::NoMatch);
         auto ptr = new NoMatchDetails(result.get());
         auto noMatch = std::shared_ptr<NoMatchDetails>(ptr);

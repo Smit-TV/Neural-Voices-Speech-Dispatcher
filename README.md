@@ -1,10 +1,17 @@
 # Neural Voices Speech Dispatcher
-* Developed by Smit TV
-## Build and install
-* To build and install use the setup.sh file
-* To add voices you should create a directory  /usr/local/neuralvoices and put folders with voices and put model.key file in each voice folder
-* Don't forget to add libraries from libs/runtimes/linux-x64/nativelib*.so into LD_PRELOAD path
-* For eg: put them into /usr/lib
-### Help
-* Actually it's my first project on c++
-* I need your help to improve this project if you want to help me add some features please leave me a message on Telegram @unknown_a11y_developer
+
+Developed by Smit TV
+
+## Build and Installation
+
+* To build and install the project, use the `setup.sh` script
+* To add a voice, create the `/usr/local/neuralvoices` directory
+* Inside it, place the voice directories and a `model.key` file for each voice
+* Do not forget to add the libraries from `libs/runtimes/linux-x64/native/lib*.so` to the dynamic library search path
+* For example, you can copy them to `/usr/lib` or add the directory to `LD_LIBRARY_PATH`
+
+## Contributing
+
+* I need help developing this project
+* This is my first C++ project, so some parts may not be implemented in the best way
+* If you would like to help, contact me on Telegram: `https://t.me/unknown_a11y_developer`

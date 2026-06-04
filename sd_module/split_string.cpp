@@ -27,37 +27,22 @@ std::vector<StringPart> splitString(const std::string& str) {
     StringPart currentPart;
     currentPart.alphabet = Alphabet::NONE;
     icu::UnicodeString newStr;
-    icu::UnicodeString cyrillicStr;
 
     for (int32_t i = 0; i < ustr.length(); ) {
         UChar32 c = ustr.char32At(i);
         i += U16_LENGTH(c);
         Alphabet alphabet = getAlphabet(c);
         if (alphabet != currentPart.alphabet && alphabet != Alphabet::NONE) {
-                    if (currentPart.alphabet == Alphabet::LATIN) {
             newStr.toUTF8String(currentPart.str);
             newStr = "";
-                    } else {
-                        cyrillicStr.toUTF8String(currentPart.str);
-                        cyrillicStr = "";
-                    }
             v.push_back(currentPart);
             currentPart = StringPart{};
             currentPart.alphabet = alphabet;
         }
-        if (currentPart.alphabet == Alphabet::LATIN) {
         newStr.append(c);
-        } else {
-            cyrillicStr.append(c);
-        }
     }
 
-            if (currentPart.alphabet == Alphabet::LATIN) {
-
     newStr.toUTF8String(currentPart.str);
-            } else {
-                cyrillicStr.toUTF8String(currentPart.str);
-            }
     v.push_back(currentPart);
 
     return v;

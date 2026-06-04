@@ -4,6 +4,6 @@
 #include <string>
 
 std::string extractTextFromSSML(const std::string& ssml);
-std::string createSpeakSSML(const std::string& text, int rate, int volume, int pitch);
+std::string createSpeakSSML(const std::string& text, int rate, int volume, int pitch, bool useDefaultPitch);
 
 #endif // SSML_PREPROCESSOR_HPP

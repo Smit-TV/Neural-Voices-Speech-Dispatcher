@@ -17,6 +17,7 @@
 #include "ssml_preprocessor.hpp"
 #include "config.hpp"
 #include "split_string.hpp"
+#include "utils.hpp"
 
 extern "C" {
 #include <speech-dispatcher/spd_module_main.h>
@@ -30,11 +31,11 @@ using namespace Microsoft::CognitiveServices::Speech::Audio;
 
 
 
-std::unordered_map<std::string, std::shared_ptr<VoiceInfo>> getAvailableVoices() {
+std::map<std::string, std::shared_ptr<VoiceInfo>> getAvailableVoices() {
     auto config = EmbeddedSpeechConfig::FromPath("/usr/local/neuralvoices/");
     auto synth = SpeechSynthesizer::FromConfig(config, nullptr);
     auto result = synth->GetVoicesAsync().get();
-    std::unordered_map<std::string, std::shared_ptr<VoiceInfo>> voices;
+    std::map<std::string, std::shared_ptr<VoiceInfo>> voices;
 
     if (result->Reason != ResultReason::VoicesListRetrieved) {
         return voices;
@@ -48,8 +49,9 @@ std::unordered_map<std::string, std::shared_ptr<VoiceInfo>> getAvailableVoices()
     return voices;
 }
 
-static std::atomic<bool> isThreadRunning = false;;
-static std::unordered_map<std::string, std::shared_ptr<VoiceInfo>> availableVoices = getAvailableVoices();
+static std::atomic<bool> isThreadRunning = false;
+static std::atomic<bool> useDefaultPitch = false;
+static std::map<std::string, std::shared_ptr<VoiceInfo>> availableVoices = getAvailableVoices();
 static std::unordered_map<std::string, std::shared_ptr<SpeechSynthesizer>> voices;
 static std::unordered_map<std::string, std::string> config;
 static std::mutex config_mtx;
@@ -63,23 +65,6 @@ static std::mutex voice_mtx;
 static std::queue<std::string> messageQueue;
 static std::mutex messageQueue_mtx;
 
-void log(const std::string& tag, const std::string& msg) {
-    if (config.find("log") == config.end() || config["log"] == "no") {
-        return;
-    }
-
-    std::string logStr = tag + ": " + msg;
-    // std::replace(logStr.begin(), logStr.end(), "\n", " ");
-    // std::replace(logStr.begin(), logStr.end(), "'", " ");
-    // std::replace(logStr.begin(), logStr.end(), "\"", " ");
-    // std::replace(logStr.begin(), logStr.end(), ";", " ");
-
-    std::cerr << logStr << std::endl;
-    if (config.find("speak-errors") != config.end() && config["speak-errors"] == "yes") {
-        std::system(("espeak '" + logStr + "' &").c_str());
-    }
-    std::system(("echo " + logStr + " >> ~/NeuralVoices.log &").c_str());
-}
 
 int getValueFromConfig(const std::string& key) {
     if (config.find(key) == config.end()) {
@@ -131,18 +116,35 @@ void speak_thread() {
                 isSpeaking = true;
                 stop_requested = 0;
 
-        if (config["latin-voice"] != "" && config["cyrillic-voice"] != "") {
+        if (config["latin-voice"] != "" || config["cyrillic-voice"] != "") {
             auto parts = splitString(text);
+            bool isComplete = false;
 
             for (const auto& part : parts) {
                 if (stop_requested == 1) {
                     break;
                 }
+
+                std::string voiceName;
+                {
+                                        std::lock_guard<std::mutex> lock(mtx);
+
+                                        voiceName = config["synthesis_voice"];
+
                 if (part.alphabet == Alphabet::LATIN) {
-                    module_set("voice", config["latin-voice"].c_str());
-                } else {
-                    module_set("voice", config["cyrillic-voice"].c_str());
+                    auto latinVoiceName = config["latin-voice"];
+                    if (!latinVoiceName.empty()) {
+                        voiceName = latinVoiceName;
+                    }
+                } else if (part.alphabet == Alphabet::CYRILLIC) {
+                    auto cyrillicVoiceName = config["cyrillic-voice"];
+                    if (!cyrillicVoiceName.empty()) {
+                        voiceName = cyrillicVoiceName;
+                    }
                 }
+            }
+
+                    module_set("voice", voiceName.c_str());
                 std::shared_ptr<SpeechSynthesizer> mVoice;
                     {
                                     std::lock_guard<std::mutex> lock(voice_mtx);
@@ -162,20 +164,23 @@ void speak_thread() {
         auto ssml = createSpeakSSML(text,
             getRate(),
             getVolume(),
-            getPitch()
+            getPitch(),
+            useDefaultPitch
 );
         auto result = mVoice->SpeakSsmlAsync(ssml).get();
-        if (result->Reason == ResultReason::SynthesizingAudioCompleted) {
-            continue;
-        } else if (result->Reason != ResultReason::Canceled) {
-            module_speak_error();
+        if (result->Reason != ResultReason::SynthesizingAudioCompleted) {
             auto cancellationDetails = SpeechSynthesisCancellationDetails::FromResult(result);
             std::cerr << cancellationDetails->ErrorDetails << std::endl;
-            log("SynthesizingAudioError", cancellationDetails->ErrorDetails);
+            if (result->Reason == ResultReason::Canceled) {
             stop_requested = 1;
             speaking_complete();
+        } else {
+            module_speak_error();
+        }
+            isComplete = true;
         }
             }
+            if (!isComplete)
             speaking_complete();
 
         } else {
@@ -192,17 +197,24 @@ void speak_thread() {
         auto ssml = createSpeakSSML(text,
             getRate(),
             getVolume(),
-            getPitch()
+            getPitch(),
+            useDefaultPitch
 );
         auto result = mVoice->SpeakSsmlAsync(ssml).get();
-        if (result->Reason == ResultReason::SynthesizingAudioCompleted) {
-            speaking_complete();
-        } else if (result->Reason != ResultReason::Canceled) {
-            module_speak_error();
+        bool isComplete = false;
+        if ( result->Reason != ResultReason::SynthesizingAudioCompleted) {
             auto cancellationDetails = SpeechSynthesisCancellationDetails::FromResult(result);
             std::cerr << cancellationDetails->ErrorDetails << std::endl;
-            log("SynthesizingAudioError", cancellationDetails->ErrorDetails);
+
+            if (result->Reason == ResultReason::Canceled) {
             stop_requested = 1;
+            speaking_complete();
+            } else {
+                module_speak_error();
+            }
+            isComplete = true;
+        }
+        if (!isComplete) {
             speaking_complete();
         }
     }
@@ -292,15 +304,15 @@ extern "C" int module_set(const char *param, const char *value)
                 std::string var(param);
         std::string val(value);
 
-        std::system(("echo "  + var + "=" + val + " >> ~/null &").c_str());
 
         //std::system(("espeak " + var + "=" + val + "").c_str());
 
     {
                     std::lock_guard<std::mutex> lock(mtx);
 
-        config[var] = val;
+                    config[var] = val;
     }
+
 
         if (var == "voice" || var == "synthesis_voice") {
             if (availableVoices.size() == 0) {
@@ -312,8 +324,9 @@ extern "C" int module_set(const char *param, const char *value)
                 // When orca uses  default voice it'll send incorrect voice name for eg synthesis_voice=Default voice neuralvoices
                 
                 std::shared_ptr<VoiceInfo> defaultVoice;
+                std::cerr << "Defining default voice" << std::endl;
                 for (auto& [key, v] : availableVoices) {
-                    if (strcmp(v->Locale.c_str(), config["language"].c_str()) == 0) {
+                    if (toLower(v->Locale) != toLower(config["language"])) {
                                             defaultVoice = v;
                         continue;
                     }
@@ -321,6 +334,7 @@ extern "C" int module_set(const char *param, const char *value)
                     break;
                 }
                     val = defaultVoice->Name;
+                    std::cerr << val << " will be used as default voice" << std::endl;
             }
 
             if (voices.find(val) == voices.end()) {
@@ -332,6 +346,8 @@ extern "C" int module_set(const char *param, const char *value)
             std::lock_guard<std::mutex> lock(voice_mtx);
             voice = voices[val];
                     }
+        } else if (var == "use-default-pitch") {
+            useDefaultPitch = val == "yes" ? true : false;
         }
 
     std::fprintf(stderr, "set '%s' = '%s'\n", param, value);
@@ -395,10 +411,14 @@ extern "C" int module_speak(char *data, size_t, SPDMessageType)
     }
 }
 
+auto text = extractTextFromSSML(data);
+
+std::cerr << "Speaking '" << text << "'" << std::endl;
+
 
     {
             std::lock_guard<std::mutex> lock(messageQueue_mtx);
-    messageQueue.push(extractTextFromSSML(data));
+    messageQueue.push(text);
     }
     cv.notify_one();
 

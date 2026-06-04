@@ -34,7 +34,7 @@ std::string extractTextFromSSML(const std::string& ssml) {
 } 
 }
 
-std::string createSpeakSSML(const std::string& text, int rate, int volume, int pitch)
+std::string createSpeakSSML(const std::string& text, int rate, int volume, int pitch, bool useDefaultPitch)
 {
     pugi::xml_document doc;
 
@@ -52,7 +52,10 @@ std::string createSpeakSSML(const std::string& text, int rate, int volume, int p
 
     prosody.append_attribute("rate") = rate_str.c_str();
     prosody.append_attribute("volume") = volume_str.c_str();
-    prosody.append_attribute("pitch") = pitch_str.c_str();
+
+    if (!useDefaultPitch) {
+            prosody.append_attribute("pitch") = pitch_str.c_str();
+    }
 
     prosody.text().set(text.c_str());
 

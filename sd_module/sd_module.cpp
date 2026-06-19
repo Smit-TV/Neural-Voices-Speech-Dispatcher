@@ -18,6 +18,7 @@
 #include "config.hpp"
 #include "split_string.hpp"
 #include "utils.hpp"
+#include "speech_synthesis_callback.hpp"
 
 extern "C" {
 #include <speech-dispatcher/spd_module_main.h>
@@ -116,7 +117,15 @@ void speak_thread() {
                 isSpeaking = true;
                 stop_requested = 0;
 
-        if (config["latin-voice"] != "" || config["cyrillic-voice"] != "") {
+                std::string cyrillicVoice;
+                std::string latinVoice;
+                {
+                    std::lock_guard<std::mutex> lock(config_mtx);
+                    cyrillicVoice = config["cyrillic-voice"];
+                    latinVoice = config["latin-voice"];
+                }
+
+        if (latinVoice != "" || cyrillicVoice != "") {
             auto parts = splitString(text);
             bool isComplete = false;
 
@@ -127,7 +136,7 @@ void speak_thread() {
 
                 std::string voiceName;
                 {
-                                        std::lock_guard<std::mutex> lock(mtx);
+                                        std::lock_guard<std::mutex> lock(config_mtx);
 
                                         voiceName = config["synthesis_voice"];
 
@@ -167,12 +176,11 @@ void speak_thread() {
             getPitch(),
             useDefaultPitch
 );
-        auto result = mVoice->SpeakSsmlAsync(ssml).get();
+        auto result = mVoice->SpeakSsml(ssml);
         if (result->Reason != ResultReason::SynthesizingAudioCompleted) {
             auto cancellationDetails = SpeechSynthesisCancellationDetails::FromResult(result);
             std::cerr << cancellationDetails->ErrorDetails << std::endl;
             if (result->Reason == ResultReason::Canceled) {
-            stop_requested = 1;
             speaking_complete();
         } else {
             module_speak_error();
@@ -190,7 +198,6 @@ void speak_thread() {
             mVoice = voice;
             }
             if (mVoice == nullptr) {
-                stop_requested = 1;
                 speaking_complete();
                 continue;
             }
@@ -200,14 +207,13 @@ void speak_thread() {
             getPitch(),
             useDefaultPitch
 );
-        auto result = mVoice->SpeakSsmlAsync(ssml).get();
+        auto result = mVoice->SpeakSsml(ssml);
         bool isComplete = false;
         if ( result->Reason != ResultReason::SynthesizingAudioCompleted) {
             auto cancellationDetails = SpeechSynthesisCancellationDetails::FromResult(result);
             std::cerr << cancellationDetails->ErrorDetails << std::endl;
 
             if (result->Reason == ResultReason::Canceled) {
-            stop_requested = 1;
             speaking_complete();
             } else {
                 module_speak_error();
@@ -304,11 +310,8 @@ extern "C" int module_set(const char *param, const char *value)
                 std::string var(param);
         std::string val(value);
 
-
-        //std::system(("espeak " + var + "=" + val + "").c_str());
-
     {
-                    std::lock_guard<std::mutex> lock(mtx);
+                    std::lock_guard<std::mutex> lock(config_mtx);
 
                     config[var] = val;
     }
@@ -337,15 +340,17 @@ extern "C" int module_set(const char *param, const char *value)
                     std::cerr << val << " will be used as default voice" << std::endl;
             }
 
+            {
+                std::lock_guard<std::mutex> lock(voice_mtx);
+            
             if (voices.find(val) == voices.end()) {
                 // We should create synthesizer before using
                 voices[val] = createSynthesizer(val);
+            } else {
+                voice = voices[val];
             }
+        }
             std::cerr << val << " will be used by default voice for synthesis" << std::endl;
-                    {
-            std::lock_guard<std::mutex> lock(voice_mtx);
-            voice = voices[val];
-                    }
         } else if (var == "use-default-pitch") {
             useDefaultPitch = val == "yes" ? true : false;
         }

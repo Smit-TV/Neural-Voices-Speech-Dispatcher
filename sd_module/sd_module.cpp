@@ -346,9 +346,8 @@ extern "C" int module_set(const char *param, const char *value)
             if (voices.find(val) == voices.end()) {
                 // We should create synthesizer before using
                 voices[val] = createSynthesizer(val);
-            } else {
-                voice = voices[val];
             }
+                voice = voices[val];
         }
             std::cerr << val << " will be used by default voice for synthesis" << std::endl;
         } else if (var == "use-default-pitch") {

@@ -353,7 +353,7 @@ enum class PropertyId
 
     /// <summary>
     /// A boolean value specifying whether to include SNR (signal to noise ratio) in the response result.
-    /// Added in version 1.18.0
+    /// Currently valid only in a pronunciation assessment scenario.
     /// </summary>
     SpeechServiceResponse_RequestSnr = 4007,
 
@@ -553,6 +553,20 @@ enum class PropertyId
     AudioConfig_AudioProcessingOptions = 8007,
 
     /// <summary>
+    /// The file path of the echo cancellation model used by audio processing. Set this to override the
+    /// default echo cancellation model location, for example when the model file is deployed to a directory
+    /// other than the one containing the core library.
+    /// </summary>
+    AudioProcessing_EchoCancellationModelPath = 8008,
+
+    /// <summary>
+    /// The file path of the personalized noise suppression model used by audio processing. Set this to override
+    /// the default personalized noise suppression model location, for example when the model file is deployed to
+    /// a directory other than the one containing the core library.
+    /// </summary>
+    AudioProcessing_PersonalizedNoiseSuppressionModelPath = 8009,
+
+    /// <summary>
     /// The file name to write logs.
     /// Added in version 1.4.0.
     /// </summary>
@@ -624,6 +638,11 @@ enum class PropertyId
     Speech_StartEventSensitivity = 9010,
 
     /// <summary>
+    /// A boolean value specifying whether to process stereo input channels separately (instead of downmixing). Default is false.
+    /// </summary>
+    Speech_EnableMultiChannelProcessing = 9020,
+
+    /// <summary>
     /// Identifier used to connect to the backend service.
     /// Added in version 1.5.0.
     /// </summary>
@@ -664,12 +683,6 @@ enum class PropertyId
     /// Added in version 1.10.0.
     /// </summary>
     Conversation_Speech_Activity_Template = 10006,
-
-    /// <summary>
-    /// Your participant identifier in the current conversation.
-    /// Added in version 1.13.0
-    /// </summary>
-    Conversation_ParticipantId = 10007,
 
     // If specified as true, request that the service send MessageStatus payloads via the ActivityReceived event
     // handler. These messages communicate the outcome of ITurnContext resolution from the dialog system.

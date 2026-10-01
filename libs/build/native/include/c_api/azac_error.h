@@ -292,12 +292,6 @@ typedef uintptr_t AZACHR;
 #define AZAC_ERR_UNEXPECTED_CONVERSATION_SITE_FAILURE  __AZAC_ERRCODE_FAILED(0x030)
 
 /// <summary>
-/// An unexpected error was encountered when trying to access the Conversation site.
-/// Added in version 1.8.0.
-/// </summary>
-#define AZAC_ERR_UNEXPECTED_CONVERSATION_TRANSLATOR_SITE_FAILURE  __AZAC_ERRCODE_FAILED(0x031)
-
-/// <summary>
 /// An asynchronous operation was canceled before it was executed.
 /// Added in version 1.8.0.
 /// </summary>

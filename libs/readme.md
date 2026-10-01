@@ -130,7 +130,6 @@ For in-depth examples covering all Speech SDK capabilities, visit our **[Speech 
 - Speech translation
 - Pronunciation assessment
 - Language identification
-- Multi-device conversations
 
 **Platform-specific samples:**
 - Console applications

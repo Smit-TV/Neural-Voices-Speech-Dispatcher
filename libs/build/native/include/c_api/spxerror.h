@@ -314,13 +314,6 @@
         AZAC_ERR_UNEXPECTED_CONVERSATION_SITE_FAILURE
 
 /// <summary>
-/// An unexpected error was encountered when trying to access the Conversation site.
-/// Added in version 1.8.0.
-/// </summary>
-#define SPXERR_UNEXPECTED_CONVERSATION_TRANSLATOR_SITE_FAILURE \
-        AZAC_ERR_UNEXPECTED_CONVERSATION_TRANSLATOR_SITE_FAILURE
-
-/// <summary>
 /// An asynchronous operation was canceled before it was executed.
 /// Added in version 1.8.0.
 /// </summary>

@@ -9,6 +9,7 @@
 #include <vector>
 #include <memory>
 #include <speechapi_cxx_common.h>
+#include <speechapi_cxx_enums.h>
 #include <speechapi_cxx_string_helpers.h>
 #include <speechapi_cxx_smart_handle.h>
 #include <speechapi_c_audio_processing_options.h>
@@ -230,7 +231,7 @@ public:
     /// </summary>
     /// <param name="audioProcessingFlags">Specifies flags to control the audio processing performed by Speech SDK. It is bitwise OR of AUDIO_INPUT_PROCESSING_XXX constants.</param>
     /// <param name="speakerReferenceChannel">Specifies the speaker reference channel position in the input audio.</param>
-    /// <param name="speakerSignature">Specifies the speaker signature (128 floats) used by Personalized Noise Suppression (PNS). Internal only.</param>
+    /// <param name="speakerSignature">Specifies the speaker signature (128 floats) used by Personalized Noise Suppression (PNS). Reserved for Microsoft first-party applications.</param>
     /// <returns>The newly created AudioProcessingOptions wrapped inside a std::shared_ptr.</returns>
     static std::shared_ptr<AudioProcessingOptions> Create(int audioProcessingFlags, SpeakerReferenceChannel speakerReferenceChannel, const std::vector<float>& speakerSignature = {})
     {
@@ -357,7 +358,7 @@ public:
 
     /// <summary>
     /// Retrieves the speaker signature if present. Returns an empty vector when unset.
-    /// Internal only.
+    /// Reserved for Microsoft first-party applications.
     /// </summary>
     /// <returns>A std::vector of floats containing the speaker signature (128 floats), or an empty vector if not set.</returns>
     std::vector<float> GetSpeakerSignature() const
@@ -383,6 +384,16 @@ public:
     }
 
     /// <summary>
+    /// Sets a property value by ID.
+    /// </summary>
+    /// <param name="id">The property id.</param>
+    /// <param name="value">The property value.</param>
+    void SetProperty(PropertyId id, const SPXSTRING& value)
+    {
+        property_bag_set_string(m_propertybag, static_cast<int>(id), nullptr, Utils::ToUTF8(value).c_str());
+    }
+
+    /// <summary>
     /// Gets a property value by name.
     /// </summary>
     /// <param name="name">The parameter name.</param>
@@ -390,6 +401,17 @@ public:
     SPXSTRING GetProperty(const SPXSTRING& name) const
     {
         const char* value = property_bag_get_string(m_propertybag, -1, Utils::ToUTF8(name).c_str(), "");
+        return Utils::ToSPXString(Utils::CopyAndFreePropertyString(value));
+    }
+
+    /// <summary>
+    /// Gets a property value by ID.
+    /// </summary>
+    /// <param name="id">The parameter id.</param>
+    /// <returns>The property value.</returns>
+    SPXSTRING GetProperty(PropertyId id) const
+    {
+        const char* value = property_bag_get_string(m_propertybag, static_cast<int>(id), nullptr, "");
         return Utils::ToSPXString(Utils::CopyAndFreePropertyString(value));
     }
 

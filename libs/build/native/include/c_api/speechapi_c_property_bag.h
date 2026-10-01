@@ -117,6 +117,8 @@ enum  PropertyId
 
     Speech_StartEventSensitivity = 9010,
 
+    Speech_EnableMultiChannelProcessing = 9020,
+
     Conversation_ApplicationId = 10000,
     Conversation_DialogType = 10001,
     Conversation_Initial_Silence_Timeout = 10002,
@@ -124,7 +126,6 @@ enum  PropertyId
     Conversation_Conversation_Id = 10004,
     Conversation_Custom_Voice_Deployment_Ids = 10005,
     Conversation_Speech_Activity_Template = 10006,
-    Conversation_ParticipantId = 10007,
     DataBuffer_TimeStamp = 11001,
     DataBuffer_UserId = 11002,
 

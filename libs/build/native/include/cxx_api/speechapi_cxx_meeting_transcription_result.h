@@ -20,6 +20,7 @@ namespace Transcription {
 
 /// <summary>
 /// Represents the result of a meeting transcriber.
+/// Reserved for Microsoft first-party applications.
 /// </summary>
 class MeetingTranscriptionResult final : public RecognitionResult
 {

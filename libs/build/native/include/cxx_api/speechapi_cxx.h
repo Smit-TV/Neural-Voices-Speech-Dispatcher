@@ -77,7 +77,6 @@
 #include <speechapi_cxx_keyword_recognition_eventargs.h>
 #include <speechapi_cxx_keyword_recognizer.h>
 
-#include <speechapi_cxx_conversation.h>
 #include <speechapi_cxx_conversation_transcriber.h>
 #include <speechapi_cxx_conversation_transcription_eventargs.h>
 #include <speechapi_cxx_conversation_transcription_result.h>
@@ -87,8 +86,6 @@
 #include <speechapi_cxx_meeting_transcription_result.h>
 #include <speechapi_cxx_user.h>
 #include <speechapi_cxx_participant.h>
-#include <speechapi_cxx_conversation_translator.h>
-#include <speechapi_cxx_conversation_translator_events.h>
 
 #include <speechapi_cxx_auto_detect_source_lang_result.h>
 

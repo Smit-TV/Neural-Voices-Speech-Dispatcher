@@ -847,6 +847,30 @@
             </summary>
             <returns>An array of floats containing the speaker signature (128 floats), or an empty array if not set.</returns>
         </member>
+        <member name="M:Microsoft.CognitiveServices.Speech.Audio.AudioProcessingOptions.SetProperty(Microsoft.CognitiveServices.Speech.PropertyId,System.String)">
+            <summary>
+            Sets a property value by <see cref="T:Microsoft.CognitiveServices.Speech.PropertyId"/>.
+            </summary>
+            <remarks>
+            Use this to override audio processing defaults, for example
+            <see cref="F:Microsoft.CognitiveServices.Speech.PropertyId.AudioProcessing_EchoCancellationModelPath"/> to point at a custom echo cancellation
+            model file or <see cref="F:Microsoft.CognitiveServices.Speech.PropertyId.AudioProcessing_PersonalizedNoiseSuppressionModelPath"/> to point at a
+            custom personalized noise suppression model file. The property must be set on this object before it is
+            passed to AudioConfig, because audio processing options do not inherit properties from SpeechConfig.
+            </remarks>
+            <param name="id">The <see cref="T:Microsoft.CognitiveServices.Speech.PropertyId"/> of the property.</param>
+            <param name="value">Value of the property.</param>
+        </member>
+        <member name="M:Microsoft.CognitiveServices.Speech.Audio.AudioProcessingOptions.GetProperty(Microsoft.CognitiveServices.Speech.PropertyId)">
+            <summary>
+            Gets a property value by <see cref="T:Microsoft.CognitiveServices.Speech.PropertyId"/>.
+            </summary>
+            <remarks>
+            If the property value is not defined, an empty string is returned.
+            </remarks>
+            <param name="id">The <see cref="T:Microsoft.CognitiveServices.Speech.PropertyId"/> of the property.</param>
+            <returns>Value of the property.</returns>
+        </member>
         <member name="M:Microsoft.CognitiveServices.Speech.Audio.AudioProcessingOptions.Dispose">
             <summary>
             Dispose of associated resources held by the object.
@@ -1203,13 +1227,6 @@
             <param name="recognizer">The recognizer associated with the connection.</param>
             <returns>The Connection instance of the recognizer.</returns>
         </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Connection.FromConversationTranslator(Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslator)">
-            <summary>
-            Gets the Connection instance from the conversation translator.
-            </summary>
-            <param name="convTrans">The conversation translator associated with the connection.</param>
-            <returns>The Connection instance of the conversation translator.</returns>
-        </member>
         <member name="M:Microsoft.CognitiveServices.Speech.Connection.FromDialogServiceConnector(Microsoft.CognitiveServices.Speech.Dialog.DialogServiceConnector)">
             <summary>
             Gets the Connection instance from the specified dialog service connector, used for observing and managing
@@ -1399,227 +1416,6 @@
             </summary>
             <returns>A string that represents the connection message event.</returns>
         </member>
-        <member name="T:Microsoft.CognitiveServices.Speech.Transcription.Conversation">
-            <summary>
-            Transcribes conversations from speech. Returns recognized text and speaker id.
-            Added in 1.8.0
-            </summary>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Transcription.Conversation.CreateConversationAsync(Microsoft.CognitiveServices.Speech.SpeechConfig,System.String)">
-            <summary>
-            Creates a new conversation asynchronously.
-            </summary>
-            <remarks>
-            After a conversation is created by this asynchronous operation, the <see cref="T:Microsoft.CognitiveServices.Speech.Transcription.Conversation"/>.ConversationId contains the conversation identifier.
-            </remarks>
-            <param name="speechConfig">The speech configuration to use.</param>
-            <param name="conversationId">(Optional) The identifier for the conversation you want to join.</param>
-            <returns></returns>
-        </member>
-        <member name="P:Microsoft.CognitiveServices.Speech.Transcription.Conversation.ConversationId">
-            <summary>
-            Gets or sets the conversation id.
-            </summary>
-        </member>
-        <member name="P:Microsoft.CognitiveServices.Speech.Transcription.Conversation.AuthorizationToken">
-            <summary>
-            Gets/sets authorization token used to communicate with the service.
-            Note: The caller needs to ensure that the authorization token is valid. Before the authorization token
-            expires, the caller needs to refresh it by calling this setter with a new valid token.
-            Otherwise, the recognizer will encounter errors during recognition.
-            </summary>
-        </member>
-        <member name="P:Microsoft.CognitiveServices.Speech.Transcription.Conversation.SpeechRecognitionLanguage">
-            <summary>
-            Gets the language name that is used for recognition.
-            </summary>
-        </member>
-        <member name="P:Microsoft.CognitiveServices.Speech.Transcription.Conversation.OutputFormat">
-            <summary>
-            Gets the output format setting.
-            </summary>
-        </member>
-        <member name="P:Microsoft.CognitiveServices.Speech.Transcription.Conversation.Properties">
-            <summary>
-            Gets the collection of properties and their values defined for this <see cref="T:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranscriber"/>.
-            </summary>
-        </member>
-        <member name="P:Microsoft.CognitiveServices.Speech.Transcription.Conversation.NativeHandle">
-            <summary>
-            Gets the native handle for the conversation.
-            </summary>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Transcription.Conversation.AddParticipantAsync(System.String)">
-            <summary>
-            Add a participant to a conversation using the user's id as an asynchronous operation.
-            </summary>
-            <remarks>
-            The returned participants can be used to remove. If the client changes the participant's attributes,
-            the changed attributes are passed on to the service only when the participants is added again.
-            </remarks>
-            <param name="userId">A user identifier.</param>
-            <returns>An asynchronous operation representing adding a participant.</returns>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Transcription.Conversation.AddParticipantAsync(Microsoft.CognitiveServices.Speech.Transcription.User)">
-            <summary>
-            Add a participant to a conversation using the User object asynchronously.
-            </summary>
-            <param name="user">A User object.</param>
-            <returns>An asynchronous operation representing adding a participant.</returns>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Transcription.Conversation.AddParticipantAsync(Microsoft.CognitiveServices.Speech.Transcription.Participant)">
-            <summary>
-            Add a participant to a conversation using the Participant object asynchronously.
-            </summary>
-            <param name="participant">A participant object.</param>
-            <returns>An asynchronous operation representing adding a participant.</returns>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Transcription.Conversation.RemoveParticipantAsync(Microsoft.CognitiveServices.Speech.Transcription.Participant)">
-            <summary>
-            Remove a participant in a conversation using the Participant object asynchronously.
-            </summary>
-            <param name="participant">A Participant object.</param>
-            <returns>An asynchronous operation representing adding a participant.</returns>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Transcription.Conversation.RemoveParticipantAsync(Microsoft.CognitiveServices.Speech.Transcription.User)">
-            <summary>
-            Remove a participant in a conversation using the User object asynchronously.
-            </summary>
-            <param name="user">A User object.</param>
-            <returns>An asynchronous operation representing removing a participant.</returns>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Transcription.Conversation.RemoveParticipantAsync(System.String)">
-            <summary>
-            Remove a participant from a conversation using a user identifier asynchronously.
-            </summary>
-            <param name="userId">A user identifier.</param>
-            <returns>An asynchronous operation representing removing a participant.</returns>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Transcription.Conversation.EndConversationAsync">
-            <summary>
-            End a conversation.
-            </summary>
-            <returns>An asynchronous operation representing ending a conversation.</returns>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Transcription.Conversation.StartConversationAsync">
-            <summary>
-            Start a conversation.
-            </summary>
-            <returns>An asynchronous operation representing starting a conversation.</returns>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Transcription.Conversation.DeleteConversationAsync">
-            <summary>
-            Delete a conversation. After this no one will be able to join the conversation.
-            </summary>
-            <returns>An asynchronous operation representing deleting a conversation.</returns>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Transcription.Conversation.LockConversationAsync">
-            <summary>
-            Lock a conversation. This will prevent new participants from joining.
-            </summary>
-            <returns>An asynchronous operation representing locking a conversation.</returns>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Transcription.Conversation.UnlockConversationAsync">
-            <summary>
-            Unlocks a conversation.
-            </summary>
-            <returns>An asynchronous operation representing unlocking a conversation.</returns>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Transcription.Conversation.MuteAllParticipantsAsync">
-            <summary>
-            Mute all other participants in the conversation. After this no other participants will
-            have their speech recognitions broadcast, nor be able to send text messages.
-            </summary>
-            <returns>An asynchronous operation representing muting all participants.</returns>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Transcription.Conversation.UnmuteAllParticipantsAsync">
-            <summary>
-            Unmute all other participants in the conversation.
-            </summary>
-            <returns>An asynchronous operation representing un-muting all participants.</returns>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Transcription.Conversation.MuteParticipantAsync(System.String)">
-            <summary>
-            Mute a participant.
-            </summary>
-            <param name="userId">A user identifier.</param>
-            <returns>An asynchronous operation representing muting a particular participant.</returns>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Transcription.Conversation.UnmuteParticipantAsync(System.String)">
-            <summary>
-            Unmute a participant.
-            </summary>
-            <param name="userId">A user identifier.</param>
-            <returns>An asynchronous operation representing un-muting a particular participant.</returns>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Transcription.Conversation.Dispose(System.Boolean)">
-            <summary>
-            
-            </summary>
-            <param name="disposeManaged"></param>
-            <returns></returns>
-        </member>
-        <member name="T:Microsoft.CognitiveServices.Speech.Transcription.ConversationExpirationEventArgs">
-            <summary>
-            Contains a payload for the <see cref="E:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslator.ConversationExpiration"/> event.
-            Added in 1.9.0
-            </summary>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Transcription.ConversationExpirationEventArgs.#ctor(System.IntPtr)">
-            <summary>
-            Creates a new instance.
-            </summary>
-            <param name="eventHandle">The event handle</param>
-        </member>
-        <member name="P:Microsoft.CognitiveServices.Speech.Transcription.ConversationExpirationEventArgs.ExpirationTime">
-            <summary>
-            How much longer until the conversation expires.
-            </summary>
-        </member>
-        <member name="T:Microsoft.CognitiveServices.Speech.Transcription.ParticipantChangedReason">
-            <summary>
-            Why the participant changed event was raised
-            Added in 1.9.0
-            </summary>
-        </member>
-        <member name="F:Microsoft.CognitiveServices.Speech.Transcription.ParticipantChangedReason.JoinedConversation">
-            <summary>
-            Participant has joined the conversation.
-            </summary>
-        </member>
-        <member name="F:Microsoft.CognitiveServices.Speech.Transcription.ParticipantChangedReason.LeftConversation">
-            <summary>
-            Participant has left the conversation. This could be voluntary, or involuntary
-            (e.g. they are experiencing networking issues).
-            </summary>
-        </member>
-        <member name="F:Microsoft.CognitiveServices.Speech.Transcription.ParticipantChangedReason.Updated">
-            <summary>
-            The participants' state has changed (e.g. they became muted, changed their nickname).
-            </summary>
-        </member>
-        <member name="T:Microsoft.CognitiveServices.Speech.Transcription.ConversationParticipantsChangedEventArgs">
-            <summary>
-            Contains a payload for the <see cref="E:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslator.ParticipantsChanged" /> event.
-            Added in 1.9.0
-            </summary>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Transcription.ConversationParticipantsChangedEventArgs.#ctor(System.IntPtr)">
-            <summary>
-            Creates a new instance.
-            </summary>
-            <param name="handle">The event handle.</param>
-        </member>
-        <member name="P:Microsoft.CognitiveServices.Speech.Transcription.ConversationParticipantsChangedEventArgs.Reason">
-            <summary>
-            Why the participant changed event was raised (e.g. a participant joined).
-            </summary>
-        </member>
-        <member name="F:Microsoft.CognitiveServices.Speech.Transcription.ConversationParticipantsChangedEventArgs.Participants">
-            <summary>
-            The participant(s) that joined, left, or were updated.
-            </summary>
-        </member>
         <member name="T:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranscriber">
             <summary>
             Transcribes conversations from speech into text.
@@ -1798,238 +1594,6 @@
             </summary>
             <returns>A string that represents the conversation transcriber event.</returns>
         </member>
-        <member name="T:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslationEventArgs">
-            <summary>
-            Contains a payload for <see cref="E:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslator.Transcribing"/>, and
-            <see cref="E:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslator.Transcribed"/> events.
-            Added in 1.9.0
-            </summary>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslationEventArgs.#ctor(System.IntPtr)">
-            <summary>
-            Creates a new instance.
-            </summary>
-            <param name="handle">The event handle.</param>
-        </member>
-        <member name="P:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslationEventArgs.Result">
-            <summary>
-            Gets the conversation translation result.
-            </summary>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslationEventArgs.ToString">
-            <summary>
-            Returns a string that represents the conversation translation event.
-            </summary>
-            <returns>The string representation.</returns>
-        </member>
-        <member name="T:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslationCanceledEventArgs">
-            <summary>
-            Contains a payload for the <see cref="E:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslator.Canceled"/> event.
-            Added in 1.9.0
-            </summary>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslationCanceledEventArgs.#ctor(System.IntPtr)">
-            <summary>
-            Creates a new instance.
-            </summary>
-            <param name="handle">The event handle.</param>
-        </member>
-        <member name="P:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslationCanceledEventArgs.Reason">
-            <summary>
-            The reason the recognition was canceled.
-            </summary>
-        </member>
-        <member name="P:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslationCanceledEventArgs.ErrorCode">
-            <summary>
-            The error code in case of an unsuccessful recognition (<see cref="P:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslationCanceledEventArgs.Reason"/> is set to Error).
-            If Reason is not Error, ErrorCode returns NoError.
-            </summary>
-        </member>
-        <member name="P:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslationCanceledEventArgs.ErrorDetails">
-            <summary>
-            The error message in case of an unsuccessful recognition (<see cref="P:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslationCanceledEventArgs.Reason"/> is set to Error).
-            </summary>
-        </member>
-        <member name="T:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslationResult">
-            <summary>
-            Contains a conversation translation result.
-            Added in 1.9.0
-            </summary>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslationResult.#ctor(System.IntPtr)">
-            <summary>
-            Creates a new instance.
-            </summary>
-            <param name="resultPtr">The result handle.</param>
-        </member>
-        <member name="P:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslationResult.ParticipantId">
-            <summary>
-            The unique identifier for the participant this result is for.
-            </summary>
-        </member>
-        <member name="P:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslationResult.OriginalLang">
-            <summary>
-            The original language this result was in.
-            </summary>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslationResult.ToString">
-            <summary>
-            Returns a string that represents the conversation translation result.
-            </summary>
-            <returns>A string representation.</returns>
-        </member>
-        <member name="T:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslator">
-            <summary>
-            Creates a speech or text conversation where participants
-            can see recognized speech and typed messages in their own languages.
-            </summary>
-            <remarks>
-            See also: [Quickstart: Multi-device Conversation](/azure/cognitive-services/speech-service/quickstarts/multi-device-conversation)
-            </remarks>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslator.#ctor">
-            <summary>
-            Creates a new instance of the Conversation Translator using the default microphone input.
-            </summary>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslator.#ctor(Microsoft.CognitiveServices.Speech.Audio.AudioConfig)">
-            <summary>
-            Creates a new instance of the Conversation Translator.
-            </summary>
-            <param name="audioConfig">Audio configuration.</param>
-            <exception cref="T:System.ArgumentNullException">If the audioConfig is null.</exception>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslator.#ctor(Microsoft.CognitiveServices.Speech.Internal.InteropSafeHandle)">
-            <summary>
-            Creates a new instance.
-            </summary>
-            <param name="nativeHandle">The handle to the native conversation translator.</param>
-        </member>
-        <member name="E:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslator.SessionStarted">
-            <summary>
-            Event that signals the start of a conversation translation session.
-            </summary>
-        </member>
-        <member name="E:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslator.SessionStopped">
-            <summary>
-            Event that signals the end of a conversation translation session.
-            </summary>
-        </member>
-        <member name="E:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslator.Canceled">
-            <summary>
-            Event that signals an error with the conversation transcription, or the end of the
-            audio stream has been reached.
-            </summary>
-        </member>
-        <member name="E:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslator.ParticipantsChanged">
-            <summary>
-            Event that signals participants in the room have changed (e.g. a new participant joined).
-            </summary>
-        </member>
-        <member name="E:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslator.ConversationExpiration">
-            <summary>
-            Event that signals how many more minutes are left before the conversation expires.
-            </summary>
-        </member>
-        <member name="E:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslator.Transcribing">
-            <summary>
-            Event that signals an intermediate conversation translation result is available for a
-            conversation participant.
-            </summary>
-        </member>
-        <member name="E:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslator.Transcribed">
-            <summary>
-            Event that signals a final conversation translation result is available for a conversation
-            participant.
-            </summary>
-        </member>
-        <member name="E:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslator.TextMessageReceived">
-            <summary>
-            Event that signals a translated text message from a conversation participant.
-            </summary>
-        </member>
-        <member name="P:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslator.SpeechRecognitionLanguage">
-            <summary>
-            Gets the language name that is used for recognition.
-            </summary>
-        </member>
-        <member name="P:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslator.ParticipantId">
-            <summary>
-            Gets your participant identifier
-            </summary>
-        </member>
-        <member name="P:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslator.AuthorizationToken">
-            <summary>
-            Gets or sets the authorization token used to connect to the conversation service
-            </summary>
-        </member>
-        <member name="P:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslator.Properties">
-            <summary>
-            Gets the collection of properties and their values defined for this <see cref="T:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslator"/>.
-            </summary>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslator.JoinConversationAsync(Microsoft.CognitiveServices.Speech.Transcription.Conversation,System.String)">
-            <summary>
-            Joins an existing conversation. You should use this method if you have created a conversation
-            using <see cref="M:Microsoft.CognitiveServices.Speech.Transcription.Conversation.CreateConversationAsync(Microsoft.CognitiveServices.Speech.SpeechConfig,System.String)"/>.
-            </summary>
-            <param name="conversation">The conversation to join.</param>
-            <param name="nickname">The display name to use for the current participant.</param>
-            <returns>An asynchronous operation.</returns>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslator.JoinConversationAsync(System.String,System.String,System.String)">
-            <summary>
-            Joins an existing conversation.
-            </summary>
-            <param name="conversationId">The unique identifier for the conversation to join.</param>
-            <param name="nickname">The display name to use for the current participant.</param>
-            <param name="lang">The speech language to use for the current participant.</param>
-            <returns>An asynchronous operation.</returns>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslator.StartTranscribingAsync">
-            <summary>
-            Starts sending audio to the conversation service for speech recognition and translation. You
-            should subscribe to the <see cref="E:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslator.Transcribing"/>, and <see cref="E:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslator.Transcribed"/> events to
-            receive conversation translation results for yourself, and other participants in the
-            conversation.
-            </summary>
-            <returns>An asynchronous operation.</returns>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslator.StopTranscribingAsync">
-            <summary>
-            Stops sending audio to the conversation service. You will still receive <see cref="E:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslator.Transcribing"/>,
-            and <see cref="E:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslator.Transcribed"/> events for other participants in the conversation.
-            </summary>
-            <returns>An asynchronous operation.</returns>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslator.SendTextMessageAsync(System.String)">
-            <summary>
-            Sends an instant message to all participants in the conversation. This instant message
-            will be translated into each participant's text language.
-            </summary>
-            <param name="message">The message to send.</param>
-            <returns>An asynchronous operation.</returns>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslator.SetAuthorizationToken(System.String,System.String)">
-            <summary>
-            Sets the Cognitive Speech authorization token that will be used for connecting to the server.
-            </summary>
-            <param name="authToken">The authorization token.</param>
-            <param name="region">The Azure region for the given token.</param>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslator.LeaveConversationAsync">
-            <summary>
-            Leave the current conversation. After this is called, you will no longer receive any events.
-            </summary>
-            <returns>An asynchronous operation.</returns>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Transcription.ConversationTranslator.Dispose(System.Boolean)">
-            <summary>
-            Disposes of the object
-            </summary>
-            <param name="disposeManaged">True to dispose managed resources</param>
-            <returns></returns>
-        </member>
         <member name="T:Microsoft.CognitiveServices.Speech.Transcription.Meeting">
             <summary>
             Transcribes meetings. Returns recognized text and speaker id.
@@ -2194,6 +1758,7 @@
         <member name="T:Microsoft.CognitiveServices.Speech.Transcription.MeetingTranscriber">
             <summary>
             Transcribes meetings from speech into text, with the ability to add, remove, and identify multiple participants.
+            Reserved for Microsoft first-party applications.
             </summary>
         </member>
         <member name="E:Microsoft.CognitiveServices.Speech.Transcription.MeetingTranscriber.Transcribing">
@@ -2282,6 +1847,7 @@
         <member name="T:Microsoft.CognitiveServices.Speech.Transcription.MeetingTranscriptionResult">
             <summary>
             Contains the result of meeting transcriber.
+            Reserved for Microsoft first-party applications.
             </summary>
         </member>
         <member name="M:Microsoft.CognitiveServices.Speech.Transcription.MeetingTranscriptionResult.#ctor(System.IntPtr)">
@@ -2309,6 +1875,7 @@
         <member name="T:Microsoft.CognitiveServices.Speech.Transcription.MeetingTranscriptionEventArgs">
             <summary>
             Contains meeting transcriber event arguments.
+            Reserved for Microsoft first-party applications.
             </summary>
         </member>
         <member name="P:Microsoft.CognitiveServices.Speech.Transcription.MeetingTranscriptionEventArgs.Result">
@@ -2325,6 +1892,7 @@
         <member name="T:Microsoft.CognitiveServices.Speech.Transcription.MeetingTranscriptionCanceledEventArgs">
             <summary>
             Contains payload of meeting transcriber canceled result events.
+            Reserved for Microsoft first-party applications.
             </summary>
         </member>
         <member name="P:Microsoft.CognitiveServices.Speech.Transcription.MeetingTranscriptionCanceledEventArgs.Reason">
@@ -2373,33 +1941,6 @@
         <member name="P:Microsoft.CognitiveServices.Speech.Transcription.Participant.Id">
             <summary>
             The unique identifier for the participant.
-            </summary>
-        </member>
-        <member name="P:Microsoft.CognitiveServices.Speech.Transcription.Participant.Avatar">
-            <summary>
-            Gets the colour of the user's avatar as an HTML hex string (e.g. FF0000 for red).
-            </summary>
-        </member>
-        <member name="P:Microsoft.CognitiveServices.Speech.Transcription.Participant.DisplayName">
-            <summary>
-            The participant's display name. Please note that each participant within the same conversation must
-            have a different display name. Duplicate names within the same conversation are not allowed. You can
-            use the <see cref="P:Microsoft.CognitiveServices.Speech.Transcription.Participant.Id"/> property as another way to refer to each participant.
-            </summary>
-        </member>
-        <member name="P:Microsoft.CognitiveServices.Speech.Transcription.Participant.IsMuted">
-            <summary>
-            Gets whether or not this participant is muted.
-            </summary>
-        </member>
-        <member name="P:Microsoft.CognitiveServices.Speech.Transcription.Participant.IsUsingTts">
-            <summary>
-            Gets whether or not the participant is using Text To Speech (TTS).
-            </summary>
-        </member>
-        <member name="P:Microsoft.CognitiveServices.Speech.Transcription.Participant.IsHost">
-            <summary>
-            Gets whether or not this participant is the host.
             </summary>
         </member>
         <member name="P:Microsoft.CognitiveServices.Speech.Transcription.Participant.PreferredLanguage">
@@ -2763,87 +2304,6 @@
             </summary>
             <exception cref="T:System.ObjectDisposedException">If the object has been disposed</exception>
         </member>
-        <member name="T:Microsoft.CognitiveServices.Speech.Internal.ConversationTranslator">
-            <summary>
-            P/Invokes for the conversation translator
-            </summary>
-        </member>
-        <member name="F:Microsoft.CognitiveServices.Speech.Internal.ConversationTranslator.SPXHANDLE_INVALID">
-            <summary>
-            An invalid handle
-            </summary>
-        </member>
-        <member name="T:Microsoft.CognitiveServices.Speech.Internal.ConversationTranslator.NativeReadString`1">
-            <summary>
-            Delegate to read a string value from native code. This will return the length if you pass
-            <see cref="F:Microsoft.CognitiveServices.Speech.Internal.Utf8StringHandle.Null"/> as the native string handle. Otherwise it copy the
-            native string into the passed in native string handle.
-            </summary>
-            <typeparam name="THandle">The handle type.</typeparam>
-            <param name="handle">The native handle.</param>
-            <param name="nativeString">The native string handle.</param>
-            <param name="length">The length of the native string handle. If native string handle is
-            null, this will be set to the native string length. Otherwise this will be used to determine
-            the length of the passed in native string handle.</param>
-            <returns>An SPXHR code indicating success, or failure.</returns>
-        </member>
-        <member name="T:Microsoft.CognitiveServices.Speech.Internal.ConversationTranslator.NativeReadValue`2">
-            <summary>
-            Delegate to read a value from native code
-            </summary>
-            <typeparam name="THandle">The type of the handle.</typeparam>
-            <typeparam name="TValue">The type of the value to read.</typeparam>
-            <param name="handle">The native handle.</param>
-            <param name="value">The value to set.</param>
-            <returns>SPXHR code</returns>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Internal.ConversationTranslator.GetString``1(``0,Microsoft.CognitiveServices.Speech.Internal.ConversationTranslator.NativeReadString{``0})">
-            <summary>
-            Helper method to read a UTF8 string from native code
-            </summary>
-            <typeparam name="THandle">The native handle type.</typeparam>
-            <param name="handle">The native handle.</param>
-            <param name="nativeMethod">The native method to read</param>
-            <returns>The string value, or null. Throws an exception on errors</returns>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Internal.ConversationTranslator.TryGetString``1(``0,Microsoft.CognitiveServices.Speech.Internal.ConversationTranslator.NativeReadString{``0},System.String@)">
-            <summary>
-            Helper method to read a UTF8 string from native code
-            </summary>
-            <typeparam name="THandle">The native handle type.</typeparam>
-            <param name="handle">The native handle.</param>
-            <param name="nativeMethod">The native method to read</param>
-            <param name="stringValue">If the function succeeds, this parameter will contain the string value</param>
-            <returns>true if the string was successfully retrieved, false otherwise</returns>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Internal.ConversationTranslator.GetValue``1(Microsoft.CognitiveServices.Speech.Internal.InteropSafeHandle,Microsoft.CognitiveServices.Speech.Internal.ConversationTranslator.NativeReadValue{Microsoft.CognitiveServices.Speech.Internal.InteropSafeHandle,``0})">
-            <summary>
-            Helper method to read a value from native code
-            </summary>
-            <typeparam name="TValue">The value type to read</typeparam>
-            <param name="handle">The native handle</param>
-            <param name="method">The method to read from native code</param>
-            <returns>The value or throws an exception on failure</returns>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Internal.ConversationTranslator.TryGetValue``1(Microsoft.CognitiveServices.Speech.Internal.InteropSafeHandle,Microsoft.CognitiveServices.Speech.Internal.ConversationTranslator.NativeReadValue{Microsoft.CognitiveServices.Speech.Internal.InteropSafeHandle,``0},``0@)">
-            <summary>
-            Helper method to read a value from native code
-            </summary>
-            <typeparam name="TValue">The value type to read</typeparam>
-            <param name="handle">The native handle</param>
-            <param name="method">The method to read from native code</param>
-            <param name="value">If the function succeeds, this parameter will contain the requested value. In case of failure, this parameter will contains the default value of the requested type</param>
-            <returns>true if the value was successfully retrieved, false otherwise</returns>
-        </member>
-        <member name="M:Microsoft.CognitiveServices.Speech.Internal.ConversationTranslator.GetValue``1(System.IntPtr,Microsoft.CognitiveServices.Speech.Internal.ConversationTranslator.NativeReadValue{System.IntPtr,``0})">
-            <summary>
-            Helper method to read a value from native code
-            </summary>
-            <typeparam name="TValue">The value type to read</typeparam>
-            <param name="handle">The native handle</param>
-            <param name="method">The method to read from native code</param>
-            <returns>The value or throws an exception on failure</returns>
-        </member>
         <member name="T:Microsoft.CognitiveServices.Speech.Internal.InteropEvent`1">
             <summary>
             Helper class to simplify working with native events.
@@ -2937,6 +2397,87 @@
             </summary>
             <param name="responseHandleStr">String representation of the response handle.</param>
             <returns>IntPtr representation of the handle, or IntPtr.Zero if conversion fails.</returns>
+        </member>
+        <member name="T:Microsoft.CognitiveServices.Speech.Internal.NativeReadHelpers">
+            <summary>
+            Generic helpers for reading string and value data from native handles.
+            </summary>
+        </member>
+        <member name="F:Microsoft.CognitiveServices.Speech.Internal.NativeReadHelpers.SPXHANDLE_INVALID">
+            <summary>
+            An invalid handle
+            </summary>
+        </member>
+        <member name="T:Microsoft.CognitiveServices.Speech.Internal.NativeReadHelpers.NativeReadString`1">
+            <summary>
+            Delegate to read a string value from native code. This will return the length if you pass
+            <see cref="F:Microsoft.CognitiveServices.Speech.Internal.Utf8StringHandle.Null"/> as the native string handle. Otherwise it copy the
+            native string into the passed in native string handle.
+            </summary>
+            <typeparam name="THandle">The handle type.</typeparam>
+            <param name="handle">The native handle.</param>
+            <param name="nativeString">The native string handle.</param>
+            <param name="length">The length of the native string handle. If native string handle is
+            null, this will be set to the native string length. Otherwise this will be used to determine
+            the length of the passed in native string handle.</param>
+            <returns>An SPXHR code indicating success, or failure.</returns>
+        </member>
+        <member name="T:Microsoft.CognitiveServices.Speech.Internal.NativeReadHelpers.NativeReadValue`2">
+            <summary>
+            Delegate to read a value from native code
+            </summary>
+            <typeparam name="THandle">The type of the handle.</typeparam>
+            <typeparam name="TValue">The type of the value to read.</typeparam>
+            <param name="handle">The native handle.</param>
+            <param name="value">The value to set.</param>
+            <returns>SPXHR code</returns>
+        </member>
+        <member name="M:Microsoft.CognitiveServices.Speech.Internal.NativeReadHelpers.GetString``1(``0,Microsoft.CognitiveServices.Speech.Internal.NativeReadHelpers.NativeReadString{``0})">
+            <summary>
+            Helper method to read a UTF8 string from native code
+            </summary>
+            <typeparam name="THandle">The native handle type.</typeparam>
+            <param name="handle">The native handle.</param>
+            <param name="nativeMethod">The native method to read</param>
+            <returns>The string value, or null. Throws an exception on errors</returns>
+        </member>
+        <member name="M:Microsoft.CognitiveServices.Speech.Internal.NativeReadHelpers.TryGetString``1(``0,Microsoft.CognitiveServices.Speech.Internal.NativeReadHelpers.NativeReadString{``0},System.String@)">
+            <summary>
+            Helper method to read a UTF8 string from native code
+            </summary>
+            <typeparam name="THandle">The native handle type.</typeparam>
+            <param name="handle">The native handle.</param>
+            <param name="nativeMethod">The native method to read</param>
+            <param name="stringValue">If the function succeeds, this parameter will contain the string value</param>
+            <returns>true if the string was successfully retrieved, false otherwise</returns>
+        </member>
+        <member name="M:Microsoft.CognitiveServices.Speech.Internal.NativeReadHelpers.GetValue``1(Microsoft.CognitiveServices.Speech.Internal.InteropSafeHandle,Microsoft.CognitiveServices.Speech.Internal.NativeReadHelpers.NativeReadValue{Microsoft.CognitiveServices.Speech.Internal.InteropSafeHandle,``0})">
+            <summary>
+            Helper method to read a value from native code
+            </summary>
+            <typeparam name="TValue">The value type to read</typeparam>
+            <param name="handle">The native handle</param>
+            <param name="method">The method to read from native code</param>
+            <returns>The value or throws an exception on failure</returns>
+        </member>
+        <member name="M:Microsoft.CognitiveServices.Speech.Internal.NativeReadHelpers.TryGetValue``1(Microsoft.CognitiveServices.Speech.Internal.InteropSafeHandle,Microsoft.CognitiveServices.Speech.Internal.NativeReadHelpers.NativeReadValue{Microsoft.CognitiveServices.Speech.Internal.InteropSafeHandle,``0},``0@)">
+            <summary>
+            Helper method to read a value from native code
+            </summary>
+            <typeparam name="TValue">The value type to read</typeparam>
+            <param name="handle">The native handle</param>
+            <param name="method">The method to read from native code</param>
+            <param name="value">If the function succeeds, this parameter will contain the requested value. In case of failure, this parameter will contains the default value of the requested type</param>
+            <returns>true if the value was successfully retrieved, false otherwise</returns>
+        </member>
+        <member name="M:Microsoft.CognitiveServices.Speech.Internal.NativeReadHelpers.GetValue``1(System.IntPtr,Microsoft.CognitiveServices.Speech.Internal.NativeReadHelpers.NativeReadValue{System.IntPtr,``0})">
+            <summary>
+            Helper method to read a value from native code
+            </summary>
+            <typeparam name="TValue">The value type to read</typeparam>
+            <param name="handle">The native handle</param>
+            <param name="method">The method to read from native code</param>
+            <returns>The value or throws an exception on failure</returns>
         </member>
         <member name="T:Microsoft.CognitiveServices.Speech.Internal.Utf8StringMarshaler">
             <summary>
@@ -4030,6 +3571,13 @@
             GC handle for callbacks for context.
             </summary>
         </member>
+        <member name="F:Microsoft.CognitiveServices.Speech.KeywordRecognizer.pendingRecognizeTask">
+            <summary>
+            Tracks the most recent outstanding RecognizeOnceAsync task so that
+            StopRecognitionAsync and Dispose can await it and avoid a race with the
+            base Recognizer's activeAsyncRecognitionCounter check.
+            </summary>
+        </member>
         <member name="M:Microsoft.CognitiveServices.Speech.KeywordRecognizer.#ctor(Microsoft.CognitiveServices.Speech.Audio.AudioConfig)">
             <summary>
             Creates a KeywordRecognizer from an <see cref="T:Microsoft.CognitiveServices.Speech.Audio.AudioConfig" />. The config
@@ -4063,6 +3611,18 @@
             Stops a currently active keyword recognition session asynchronously.
             </summary>
             <returns>A future that resolves when the active session (if any) is stopped.</returns>
+        </member>
+        <member name="M:Microsoft.CognitiveServices.Speech.KeywordRecognizer.StopAndDrainAsync">
+            <summary>
+            Sends the native stop request and then awaits the outstanding RecognizeOnceAsync
+            task (if any) so that its DoAsyncRecognitionAction finally block has decremented
+            the base Recognizer.activeAsyncRecognitionCounter before this task completes.
+            This makes the documented 'await StopRecognitionAsync(); Dispose();' sequence
+            race-free on the no-keyword-match path. Any exception thrown by the recognize
+            task after an intentional stop (typically a canceled/no-match outcome) is
+            logged and swallowed because the stop request has already succeeded from the
+            caller's point of view.
+            </summary>
         </member>
         <member name="E:Microsoft.CognitiveServices.Speech.KeywordRecognizer.Recognized">
             <summary>
@@ -4736,7 +4296,7 @@
         <member name="F:Microsoft.CognitiveServices.Speech.PropertyId.SpeechServiceResponse_RequestSnr">
             <summary>
             A boolean value specifying whether to include SNR (signal to noise ratio) in the response result.
-            Added in version 1.18.0
+            Currently valid only in a pronunciation assessment scenario.
             </summary>
         </member>
         <member name="F:Microsoft.CognitiveServices.Speech.PropertyId.SpeechServiceResponse_TranslationRequestStablePartialResult">
@@ -4899,6 +4459,20 @@
             Added in version 1.17.0
             </summary>
         </member>
+        <member name="F:Microsoft.CognitiveServices.Speech.PropertyId.AudioProcessing_EchoCancellationModelPath">
+            <summary>
+            The file path of the echo cancellation model used by audio processing. Set this to override the
+            default echo cancellation model location, for example when the model file is deployed to a directory
+            other than the one containing the core library.
+            </summary>
+        </member>
+        <member name="F:Microsoft.CognitiveServices.Speech.PropertyId.AudioProcessing_PersonalizedNoiseSuppressionModelPath">
+            <summary>
+            The file path of the personalized noise suppression model used by audio processing. Set this to override
+            the default personalized noise suppression model location, for example when the model file is deployed to
+            a directory other than the one containing the core library.
+            </summary>
+        </member>
         <member name="F:Microsoft.CognitiveServices.Speech.PropertyId.Speech_LogFilename">
             <summary>
             The file name to write logs.
@@ -4973,6 +4547,11 @@
              Choose the sensitivity based on the trade-off between responsiveness and accuracy for your application.
              </summary>
         </member>
+        <member name="F:Microsoft.CognitiveServices.Speech.PropertyId.Speech_EnableMultiChannelProcessing">
+            <summary>
+            A boolean value specifying whether to process stereo input channels separately (instead of downmixing). Default is false.
+            </summary>
+        </member>
         <member name="F:Microsoft.CognitiveServices.Speech.PropertyId.Conversation_ApplicationId">
             <summary>
             Identifier used to connect to the backend service.
@@ -5026,12 +4605,6 @@
             <summary>
             Additional identifying information, such as a Direct Line token, used to authenticate with the backend service.
             Added in 1.16.0
-            </summary>
-        </member>
-        <member name="F:Microsoft.CognitiveServices.Speech.PropertyId.Conversation_ParticipantId">
-            <summary>
-            Gets your identifier in the conversation.
-            Added in 1.13.0
             </summary>
         </member>
         <member name="F:Microsoft.CognitiveServices.Speech.PropertyId.ConversationTranscribingService_DataBufferUserId">

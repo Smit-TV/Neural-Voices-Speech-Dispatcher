@@ -122,6 +122,16 @@ enum class PropertyId
     SpeechServiceConnection_ProxyHostBypass = 1105,
 
     /// <summary>
+    /// Enables IPv6 for Speech service connections. Set to "true" on a speech configuration
+    /// before creating a recognizer or synthesizer to allow IPv6 and IPv4. Defaults to "false":
+    /// on Windows, Linux, and Android, the SDK then resolves IPv4 addresses only. On macOS,
+    /// iOS, and UWP, platform networking may use IPv6 regardless of this setting.
+    /// Values "true" and "false" are case-insensitive; "1" and "0" are also accepted.
+    /// Surrounding whitespace is ignored; unrecognized values are treated as "false".
+    /// </summary>
+    SpeechServiceConnection_EnableIpv6 = 1106,
+
+    /// <summary>
     /// The list of comma separated languages used as target translation languages. Under normal circumstances,
     /// you shouldn't have to use this property directly. Instead use <see cref="SpeechTranslationConfig::AddTargetLanguage"/>
     /// and <see cref="SpeechTranslationConfig::GetTargetLanguages"/>.
@@ -565,6 +575,15 @@ enum class PropertyId
     /// a directory other than the one containing the core library.
     /// </summary>
     AudioProcessing_PersonalizedNoiseSuppressionModelPath = 8009,
+
+    /// <summary>
+    /// The license text of the personalized noise suppression model used by audio processing.
+    /// A licensed model carries this exact text embedded in the model file, and will not load
+    /// unless the value set here matches it byte for byte.
+    /// Prefer AudioProcessingOptions::SetPersonalizedNoiseSuppressionModel, which sets this and
+    /// the model path together.
+    /// </summary>
+    AudioProcessing_PersonalizedNoiseSuppressionModelLicense = 8010,
 
     /// <summary>
     /// The file name to write logs.

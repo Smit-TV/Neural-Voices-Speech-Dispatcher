@@ -4,6 +4,23 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <string>
+#include <unicode/uchar.h>
+#include <unicode/utf8.h>
+
+bool isLetter(const std::string& str) {
+    if (str.empty())
+        return false;
+
+    int32_t i = 0;
+    UChar32 c;
+
+    U8_NEXT(str.data(), i, str.size(), c);
+
+    return c >= 0 &&
+           i == static_cast<int32_t>(str.size()) &&
+           u_isalpha(c);
+}
 
 void collect_text(const pugi::xml_node& node, std::string& out) {
     for (auto child : node.children()) {
@@ -57,7 +74,13 @@ std::string createSpeakSSML(const std::string& text, int rate, int volume, int p
             prosody.append_attribute("pitch") = pitch_str.c_str();
     }
 
+    if (!isLetter(text)) {
     prosody.text().set(text.c_str());
+    } else {
+    pugi::xml_node sayAs = prosody.append_child("say-as");
+    sayAs.append_attribute("interpret-as") = "characters";
+    sayAs.text().set(text.c_str());
+    }
 
     std::ostringstream oss;
     doc.save(oss, "", pugi::format_raw);

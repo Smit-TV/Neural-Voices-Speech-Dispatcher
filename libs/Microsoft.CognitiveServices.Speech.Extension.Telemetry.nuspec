@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
     <id>Microsoft.CognitiveServices.Speech.Extension.Telemetry</id>
-    <version>1.51.2</version>
+    <version>1.52.0</version>
     <title>Microsoft Cognitive Services Speech SDK extension to use telemetry</title>
     <authors>Microsoft</authors>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
@@ -14,7 +14,7 @@
     <copyright>© Microsoft Corporation. All rights reserved.</copyright>
     <tags>Microsoft Speech Cognitive Services native C++ C# .NET .NETStandard</tags>
     <dependencies>
-      <dependency id="Microsoft.CognitiveServices.Speech" version="1.51.2" />
+      <dependency id="Microsoft.CognitiveServices.Speech" version="1.52.0" />
     </dependencies>
   </metadata>
 </package>

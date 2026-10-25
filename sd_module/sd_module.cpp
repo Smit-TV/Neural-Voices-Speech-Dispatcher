@@ -66,6 +66,7 @@ static std::shared_ptr<SpeechSynthesizer> voice;
 static std::mutex voice_mtx;
 static std::queue<std::string> messageQueue;
 static std::mutex messageQueue_mtx;
+static std::shared_ptr<AudioConfig> audioConfig;
 
 int getValueFromConfig(const std::string &key)
 {
@@ -183,11 +184,12 @@ void speak_thread()
                                             getVolume(),
                                             getPitch(),
                                             useDefaultPitch);
+
                 auto result = mVoice->SpeakSsml(ssml);
                 if (result->Reason != ResultReason::SynthesizingAudioCompleted)
                 {
                     auto cancellationDetails = SpeechSynthesisCancellationDetails::FromResult(result);
-                    std::cerr << cancellationDetails->ErrorDetails << std::endl;
+                    // std::cerr << cancellationDetails->ErrorDetails << std::endl;
                     if (result->Reason == ResultReason::Canceled)
                     {
                         speaking_complete();
@@ -323,6 +325,16 @@ extern "C" SPDVoice **module_list_voices(void)
     return ret;
 }
 
+std::shared_ptr<AudioConfig> getAudioConfig() {
+    if (audioConfig != nullptr) {
+        return audioConfig;
+    }
+
+    audioConfig = AudioConfig::FromDefaultSpeakerOutput();
+
+    return audioConfig;
+}
+
 std::shared_ptr<SpeechSynthesizer> createSynthesizer(const std::string &voice)
 {
     log("Creating synthesizer for " + voice);
@@ -336,7 +348,8 @@ std::shared_ptr<SpeechSynthesizer> createSynthesizer(const std::string &voice)
     auto config = EmbeddedSpeechConfig::FromPath(path);
     config->SetSpeechSynthesisVoice(voice, getVoiceLicense(path));
     config->SetSpeechSynthesisOutputFormat(SpeechSynthesisOutputFormat::Riff24Khz16BitMonoPcm);
-    return SpeechSynthesizer::FromConfig(config, AudioConfig::FromDefaultSpeakerOutput());
+
+    return SpeechSynthesizer::FromConfig(config, getAudioConfig());
 }
 
 extern "C" int module_set(const char *param, const char *value)
